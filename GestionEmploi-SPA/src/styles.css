@@ -1,3 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~font-awesome/css/font-awesome.min.css";
+
+@font-face { font-family: "big_noodle_titling"; src:url("./assets/fonts/big_noodle_titling.ttf");}
+@font-face { font-family: "CaviarDreams"; src:url("./assets/fonts/CaviarDreams.ttf");}
+@font-face { font-family: "CaviarDreams_BoldItalic"; src:url("./assets/fonts/CaviarDreams_BoldItalic.ttf");}
+@font-face { font-family: "IMPOS0__"; src:url("./assets/fonts/IMPOS0__.ttf");}
+@font-face { font-family: "IMPOS50_"; src:url("./assets/fonts/IMPOS50_.ttf");}
+@font-face { font-family: "Longhaul"; src:url("./assets/fonts/Longhaul.ttf");}
+@font-face { font-family: "theboldfont"; src:url("./assets/fonts/theboldfont.ttf");}

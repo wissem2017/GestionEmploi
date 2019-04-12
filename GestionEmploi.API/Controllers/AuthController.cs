@@ -32,14 +32,10 @@ namespace GestionEmploi.API.Controllers
              userForRegisterDto.Username=userForRegisterDto.Username.ToLower(); //--> Convertir en miniscule
              if (await _repo.UserExists(userForRegisterDto.Username)) return BadRequest("Cet utilisateur exist déjà");
 
-             var userToCreate = new User{
-                 Username=userForRegisterDto.Username
+             var userToCreate = new User{Username=userForRegisterDto.Username};
+             var CreatedUser= await _repo.register(userToCreate,userForRegisterDto.Password);
 
-             };
-
-                var CreatedUser= await _repo.register(userToCreate,userForRegisterDto.Password);
-
-                return StatusCode(201);
+            return StatusCode(201);
         }
 
 

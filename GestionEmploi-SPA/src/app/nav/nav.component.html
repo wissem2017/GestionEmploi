@@ -1,0 +1,40 @@
+<nav class="rtl navbar navbar-expand-md navbar-dark bg-dark">
+  <a style="margin-top:-10px;color:rgb(3, 233, 3);
+font-family:Longhaul;font-size:2.25rem;font-weight:bolder" class="navbar-brand"
+    href="#">EmploiNet</a>
+
+  <ul style="letter-spacing:1px;font-weight:bold;font-family:'CaviarDreams';font-size:1.2rem" class="navbar-nav mr-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="../home">Acceuil </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#"> ANNONCES </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Contact</a>
+    </li>
+    <li *ngIf="loggedIn()" class="nav-item">
+        <a class="nav-link" (click)="loggedOut()">Déconnexion</a>
+      </li>
+  </ul>
+
+  <div class="dropdown">
+    <a *ngIf="loggedIn()" style="letter-spacing:1px;font-weight:bold;font-family:'CaviarDreams';font-size:1.2rem"  class="dropdown-toggle text-light nav-link" >
+      BienVenu
+    </a>
+    <div class="dropdown-menu" >
+      <a class="dropdown-item" ><i class="fa fa-user-o" aria-hidden="true"></i>
+        Mon Compte</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" ><i class="fa fa-sign-out"></i>
+        Déconnexion</a>
+    </div>
+  </div>
+
+  <form *ngIf="!loggedIn()" (submit)="login()" #loginForm="ngForm" class="form-inline my-2 my-lg-0">
+    <input required name="username" class="form-control mr-sm-2" type="text" [(ngModel)]="model.username" placeholder="Login">
+    <input required  name="password" class="form-control mr-sm-2" type="password" [(ngModel)]="model.password" placeholder="Mot passe">
+    <button [disabled]="!loginForm.valid" style="font-weight:bold;font-family:'CaviarDreams';font-size:1.0rem" class="btn btn-secondary my-2 my-sm-0" type="submit"> Entrer </button>
+  </form>
+
+</nav>
