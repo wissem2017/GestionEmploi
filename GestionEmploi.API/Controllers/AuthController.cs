@@ -41,6 +41,7 @@ namespace GestionEmploi.API.Controllers
 
         [HttpPost("login")] //--> On spécifier la méthode "login" pour le verbe POST
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto){
+          
             var userFromRepo=await _repo.Login(userForLoginDto.username.ToLower(),userForLoginDto.password);
 
             if (userFromRepo==null) return Unauthorized(); //méthode qui indique qu'il n'est pas autoriser
@@ -70,9 +71,6 @@ namespace GestionEmploi.API.Controllers
             return Ok(new {
                 token=tokenHandler.WriteToken(token)
                 });          
-            
-            
         }
-
     }
 }
