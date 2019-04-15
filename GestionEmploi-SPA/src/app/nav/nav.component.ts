@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
+import { AlertifyService } from '../_services/alertify.service';
 
 @Component({
   selector: 'app-nav',
@@ -10,7 +11,7 @@ export class NavComponent implements OnInit {
   //--> Création objet pour reçoi Login et PWD
   model :any = {}; 
 
-  constructor(private authService:AuthService) { }
+  constructor(public authService:AuthService, private alertify:AlertifyService) { }
 
   ngOnInit() {
   }
@@ -18,22 +19,20 @@ export class NavComponent implements OnInit {
   //--> Méthode permet de retouner les valeur de Login et PWD dans le console
   login(){
     this.authService.login(this.model).subscribe(
-      next=>{console.log('Entrer Avec Succsse')},
-      error=>{console.log(error)}
+      next=>{this.alertify.success('Entrer Avec Succsse')},
+      error=>{this.alertify.error(error)}
     )
   }
 
   loggedIn(){
-    //--> On récupére la valeur de token s'il existe affiche Bienvenu 
-    const token=localStorage.getItem('token');
-    //si token eixte retourn true sinon return false
-    return !!token; 
+    
+    return this.authService.loggedIn(); 
   }
 
   loggedOut(){
     //--> Supprimer token lors de déconnexion
     localStorage.removeItem('token');
-    console.log('Dconnexion avec success');
+    this.alertify.message('Déconnexion avec success');
   }
 
 }

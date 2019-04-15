@@ -13,3 +13,23 @@
     background:rgb(3, 233, 3) !important
 }
 
+.dropdown-toggle,.dropdown-item{
+cursor: pointer;
+}
+
+.mnav-link:hover, .nav-link:focus{
+  text-decoration: none;
+  color:rgb(3, 233, 3) !important;
+  background:rgb(13, 22, 109) 
+
+}
+.mnav-link,.dropdown-item {
+  color: black !important;
+  letter-spacing:0.5px;
+  font-weight:bold;
+  font-family: 'CaviarDreams';
+  font-size:1.0rem
+  
+}
+
+
