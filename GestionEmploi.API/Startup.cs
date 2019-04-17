@@ -18,13 +18,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using GestionEmploi.API.Data;
 using GestionEmploi.API.Helpers;
-
-
-
-
-
+using AutoMapper;
 
 namespace GestionEmploi.API
 {
@@ -41,9 +36,16 @@ namespace GestionEmploi.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x=>x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(option =>{
+                option.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+            
             services.AddCors(); //--> Pour avoir l'autorisation de angular d'utiliser service API
+            services.AddAutoMapper();
+            services.AddTransient<TrialData>();//--> pour faire l'ajout légère des donnée de test
             services.AddScoped<IAuthRepository,AuthRepository>();
+            services.AddScoped<IEmploiRepository,EmploiRepository>(); //Ajouter l'exécution de service pour EmploiRepository
            
             //--> Ajout service d'autorisation  MiddleWare
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -59,7 +61,7 @@ namespace GestionEmploi.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,TrialData trialData )
         {
             if (env.IsDevelopment())
             {
@@ -83,6 +85,7 @@ namespace GestionEmploi.API
             }
 
             // app.UseHttpsRedirection();
+            // trialData.TrialUsers(); //--> Ajout données de test
             app.UseCors(x=>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); //--> Avoir une autorisation pour tous le monde
             
             app.UseAuthentication();//--> Tester l'autorisation

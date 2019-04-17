@@ -9,10 +9,11 @@ using System.Text;
 using System;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestionEmploi.API.Controllers
 {
+  [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
