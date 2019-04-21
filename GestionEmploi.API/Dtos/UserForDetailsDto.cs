@@ -17,8 +17,10 @@ namespace GestionEmploi.API.Dtos
         public string LookingFor { get; set; } //Poste chercher
         public string City { get; set; }
         public string  Country { get; set; }
-        public string PhotoUrl { get; set; }
+       public string PhotoUrl { get; set; }
+       
         public ICollection<PhotoForDetailsDto> Photos { get; set; }
+      
       
 
     }

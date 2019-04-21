@@ -1,0 +1,52 @@
+/*Fixer la taille de l'image*/
+.card-img-top {
+    width: 100%;
+    height: 13vw;
+    object-fit:initial;
+    margin-top: -1px;
+    /*border-radius: 5px 5px 0px 0px/25px 25px 25px 5px;*/
+}
+
+/*ce style sera appliquer lorqu'on met le cuseur sur l'image sur l'image
+*/
+.card:hover img{
+    transform: scale(1.2,1.2); /* Augmenter la taille de l'image 1.2% */
+    transition-duration: 500ms; /* Durée de l'affichage*/
+    transition-timing-function: ease-out; /*La manière de l'affichage*/
+    opacity:0.7; /*diminuer la lumésité de l'image*/
+}
+
+/* retourner à la taille initiale*/
+.card img{
+    transform: scale(1,1); /* Augmenter la taille de l'image 1.2% */
+    transition-duration: 500ms; /* Durée de l'affichage*/
+    transition-timing-function: ease-out; /*La manière de l'affichage*/
+}
+
+/*permet l'orsque l'image s'agrandie ne dipasse pas le bord*/*
+.wrapper{
+    overflow: hidden; /*cacher la partie suprieur de bordure*/
+    position: relative;
+}
+
+/* Modifier les proriété des button*/
+.membres-icons{
+    position: absolute;
+    bottom: -30%; /*Cacher boutton*/
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+}
+
+/* appliuer la modification sur les button losqu'on on fait zomm*/
+.wrapper:hover .membres-icons{
+    bottom: 0; 
+    opacity: 1;
+}
+
+/* fait l'effet de animation sur les boutton*/
+.animate{
+    transition: all 0.3s ease-in-out;
+}

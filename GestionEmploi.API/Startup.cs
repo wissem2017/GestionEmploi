@@ -42,9 +42,13 @@ namespace GestionEmploi.API
             });
             
             services.AddCors(); //--> Pour avoir l'autorisation de angular d'utiliser service API
+
             services.AddAutoMapper();
+
             services.AddTransient<TrialData>();//--> pour faire l'ajout légère des donnée de test
+
             services.AddScoped<IAuthRepository,AuthRepository>();
+            
             services.AddScoped<IEmploiRepository,EmploiRepository>(); //Ajouter l'exécution de service pour EmploiRepository
            
             //--> Ajout service d'autorisation  MiddleWare

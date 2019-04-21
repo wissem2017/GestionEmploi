@@ -11,8 +11,7 @@ namespace GestionEmploi.API.Helpers
         {
             //--> Création MAP de User vers UserForListDto
             CreateMap<User,UserForListDto>()
-            .ForMember(dest=>dest.PhotoUrl,opt=>{
-                    opt.MapFrom(src=>src.Photos.FirstOrDefault(p=>p.IsMain).Url);})
+            .ForMember(dest=>dest.PhotoUrl,opt=>{opt.MapFrom(src=>src.Photos.FirstOrDefault(p=>p.IsMain).Url);})
             .ForMember(dest=>dest.Age,opt=>{opt.ResolveUsing(src=>src.DateOfBirth.CalculateAge());});
 
              //--> Création MAP de User vers UserForDetailsDto
