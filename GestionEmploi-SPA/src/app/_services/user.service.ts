@@ -24,5 +24,11 @@ getUser(id):Observable<User>{
   return this.http.get<User>(this.baseUrl+id);
 }
 
+//--> Méthode permet de MAJ User
+udpateUser(id:number, user:User){
+  return this.http.put(this.baseUrl+id,user);
+}
+
+
 
 }

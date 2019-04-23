@@ -7,27 +7,29 @@ import { AuthGuard } from './_guards/auth.guard';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { MemberdetailResolver } from './_resolvers/member-detail-resolver';
 import { MemberlistResolver } from './_resolvers/member-list-resolver';
-
-export const appRoutes:Routes=[
-    {path:'',component:HomeComponent},
-    //--> Permet de protéger les pages que l'utilisateur soit authentifier
-    {path:'',runGuardsAndResolvers:'always',
-    canActivate:[AuthGuard],
-    children:[
-
-        {path:'members',component:MemberListComponent,resolve:{
-            users:MemberlistResolver
-        }},
-
-        {path:'members/:id',component:MemberDetailComponent,resolve:{
-            user:MemberdetailResolver
-        }},
-
-        {path:'lists',component:ListsComponent},
-
-        {path:'messages',component:MessagesComponent}
-        
-    ]},
-       
-    {path:'**',redirectTo:'',pathMatch:'full'}
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
+import { MemberEditResolver } from './_resolvers/member-edit-resolver';
+import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
+export const appRoutes: Routes = [
+    { path: '', component: HomeComponent },
+    {
+        path: '',
+        runGuardsAndResolvers: 'always'
+        , canActivate: [AuthGuard],
+        children: [
+            { path: 'members', component: MemberListComponent,resolve:{
+                users:MemberlistResolver
+            } },
+            { path: 'member/edit', component: MemberEditComponent ,resolve:{
+                user:MemberEditResolver},canDeactivate:[PreventUnsavedChangesGuard]},
+            { path: 'members/:id', component: MemberDetailComponent,resolve:{
+                user:MemberdetailResolver
+            } },
+           
+            { path: 'lists', component: ListsComponent },
+            { path: 'messages', component: MessagesComponent }
+        ]
+    },
+   
+    { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

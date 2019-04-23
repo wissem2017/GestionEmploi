@@ -1,71 +1,88 @@
-<!--
- {{user?.username}}
---< on utilise "?" pour qu'il n'affiche pas d'euur s'il n'apas de valeur-->
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-sm-4">
-                <div class="card">
-                        <img  class="card-img-top img-thumbnail" src="{{user.photoUrl}}" alt="{{user.username}}"> 
-                        <div class="card-body">
-                            <div style="font-family:'CaviarDreams'">
-                                <strong>Habite à :</strong>
-                                <p>{{user.city}}, {{user.country}}</p>
-                            </div>
-                            <div style="font-family:'CaviarDreams'">
-                                <strong>Age :</strong>
-                                <p>{{user.age}}</p>
-                            </div>
-                            <div style="font-family:'CaviarDreams'">
-                                <strong>Dernier Date Accessé :</strong>
-                                <p>{{user.lastActive}}</p>
-                            </div>
-                            <div style="font-family:'CaviarDreams'">
-                                <strong>Dernier D'inscription :</strong>
-                                <p>{{user.created}}</p>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="btn-group d-flex">
-                                <button class="btn btn-primary w-100">Like</button>
-                                <button class="btn btn-danger w-100">Poster</button>       
-                            </div>
-                        </div>
-                    </div>
-            
-        </div>
-        <div class="col-sm-8">
+        <div class="row">
+          
+          <div class="col-sm-4 mt-3">
+            <div class="card">
+              <img class="card-img-top img-thumbnail" src="{{user.photoUrl}}" alt="{{user.username}}">
+              <div class="card-body">
+                <div>
+                  <strong>Adresse : </strong>
+                  <p>{{user.country}},{{user.city}}</p>
+                </div>
+                <div>
+                  <strong>Age :</strong>
+                  <p>{{user.age}}</p>
+                </div>
+                <div>
+                  <strong>Dernière apparition : </strong>
+                  <p>{{user.lastActive}}</p>
+                </div>
+                <div>
+                  <strong>Adhéré depuis :</strong>
+                  <p>{{user.created}}</p>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="btn-group d-flex">
+                  <button class="btn btn-info btn-lg mr-2">Like </button>
+                  <button class="btn btn-info btn-lg ml-2">Postuler</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-8">
             <div class="tab-Panel">
-                <tabset class="member-tabset">
-
-                    <tab heading="Moi {{user?.username}}">
-                        <h4 style="font-family:'CaviarDreams'" ><b>Je me présente :</b></h4>
-                        <p style="font-family:'CaviarDreams'">{{user.introduction}}</p>
-                        <h4 style="font-family:'CaviarDreams'"><b>Je cherhcer comme poste :</b></h4>
-                        <p style="font-family:'CaviarDreams'">{{user.interests}}</p>
-                    </tab>
-
-                    <tab heading="Mes Compétences">
-                            <h4 style="font-family:'CaviarDreams'"><b>Mes Compétences :</b></h4>
-                            <p style="font-family:'CaviarDreams'">{{user.introduction}}</p>
-                    </tab>
-
-                    <tab heading="Mon CV">
-                            <h4 style="font-family:'CaviarDreams'" ><b>Mon CV :</b></h4>
-                            <p style="font-family:'CaviarDreams'">{{user.introduction}}</p>
-                    </tab>
-
-                    <tab heading="Mes Photos">
-                            <h4 style="font-family:'CaviarDreams'"><b>Mes Photos :</b></h4>
-                            <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
-                    </tab>
-
-                    <tab heading="Messages">
-                            <h4 style="font-family:'CaviarDreams'" ><b>Mes Messages :</b></h4>
-                            <p style="font-family:'CaviarDreams'">Messages......</p>
-                    </tab>
-
-                </tabset>   
-            </div> 
+              <tabset class="member-tabset">
+                <tab heading="Je suis {{user.username}}">
+                  <div class="card">
+                      <div class="card-header">
+                          <h4  style="color: white">Je me présente </h4>
+                        </div>
+                        <div class="card-text mt-3 p-2">
+                          <p>{{user.introduction}}</p>
+                        </div>
+                  </div>
+                  
+                  <div class="card mt-4">
+                      <div class="card-header">
+                          <h4  style="color: white">Je Cherche :</h4>
+                        </div>
+                        <div class="card-text mt-3 p-2">
+                          <p>{{user.lookingFor}}</p>
+                        </div>
+                  </div>
+      
+                  
+                </tab>
+            
+            
+      
+            <tab heading="Mes hobbies">
+                <div class="card">
+                    <div class="card-header">
+                        <h4  style="color: white">Mes hobbies </h4>
+                      </div>
+                      <div class="card-text mt-3 p-2">
+                          <p>{{user.interests}}</p>
+                      </div>
+                </div>
+            </tab>
+      
+      
+            <tab heading="Album photo">
+      
+              <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+            </tab>
+      
+            <tab heading="Les messages">
+                <div class="card-header">
+                    <h4  style="color: white">Les messages </h4>
+                </div>
+                <p>Les messages arrivent</p>
+            </tab>
+      
+            </tabset>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
+      </div>

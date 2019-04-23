@@ -11,31 +11,32 @@ import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gal
   styleUrls: ['./member-detail.component.css']
 })
 export class MemberDetailComponent implements OnInit {
-user:User
-galleryOptions: NgxGalleryOptions[];
-galleryImages: NgxGalleryImage[];
+  user:User
+  galleryOptions: NgxGalleryOptions[];
+  galleryImages: NgxGalleryImage[];
 
   constructor(private userService:UserService,private alertify:AlertifyService, private route:ActivatedRoute) { }
 
   ngOnInit() {
-    // this.loadUser();
-    this.route.data.subscribe(data=>{
-      this.user=data['user']
-    });
+      // this.loadUser();
+      this.route.data.subscribe(data=>{
+        this.user=data['user']
+      });
 
-    //--> Caractérestique de l'image 
-    this.galleryOptions=[{
-      width:'500px',
-      height:'500px',
-      imagePercent:100,
-      thumbnailsColumns:4,
-      imageAnimation:NgxGalleryAnimation.Slide,
-      preview:false //--> Pour que l'image reste dans la même zone
-    }]
+      //--> Caractérestique de l'image 
+      this.galleryOptions=[{
+        width:'500px',
+        height:'500px',
+        imagePercent:100,
+        thumbnailsColumns:4,
+        imageAnimation:NgxGalleryAnimation.Slide,
+        preview:false //--> Pour que l'image reste dans la même zone
+      }]
 
-    //--> Caractéristique de galerie image
-    this.galleryImages=this.getImages();
+      //--> Caractéristique de galerie image
+      this.galleryImages=this.getImages();
   }
+
 //--> Méthode permet de retourner la liste des image users
   getImages(){
     const imageUrls=[];
@@ -50,13 +51,5 @@ galleryImages: NgxGalleryImage[];
     return imageUrls;
   }
 
-  // loadUser(){
-  //   this.userService.getUser(+this.route.snapshot.params['id']).subscribe(
-  //     (user:User)=>{this.user=user},
-  //     error=>{this.alertify.error(error)}
-  //   );
-    //--> Récupérer Id de user à traver URL Active (route)
-    //--> on a utilisé (+) pour convertir en entier
-  } 
-
-}
+  
+} 

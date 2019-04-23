@@ -23,6 +23,8 @@ namespace GestionEmploi.API.Helpers
             CreateMap<Photo,PhotoForDetailsDto>();
              //--> Création MAP de FileUser vers FileUserForDetailsDto
            // CreateMap<FileUser,FileUserForDetailsDto>();
+           
+           CreateMap<UserForUpdateDto,User>();
         }
     }
 }
