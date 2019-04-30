@@ -52,6 +52,8 @@ namespace GestionEmploi.API
             services.AddScoped<IAuthRepository,AuthRepository>();
             
             services.AddScoped<IEmploiRepository,EmploiRepository>(); //Ajouter l'exécution de service pour EmploiRepository
+
+            services.AddScoped<LogUserActivity>();//--> Ajouter service pour filter
            
             //--> Ajout service d'autorisation  MiddleWare
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

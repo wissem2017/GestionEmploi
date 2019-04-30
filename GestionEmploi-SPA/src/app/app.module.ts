@@ -9,6 +9,7 @@ import { NgxGalleryModule } from 'ngx-gallery';
 import { FileUploadModule } from 'ng2-file-upload';
 
 
+
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { AuthService } from './_services/auth.service';
@@ -21,6 +22,8 @@ import { MemberCardComponent } from './members/member-card/member-card.component
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
+import {TimeAgoPipe} from 'time-ago-pipe';
+
 
 import { appRoutes } from './routes';
 import { AuthGuard } from './_guards/auth.guard';
@@ -53,6 +56,7 @@ export function tokenGetter(){
       MemberCardComponent,
       MemberDetailComponent,
       MemberEditComponent,
+      TimeAgoPipe,
       PhotoEditorComponent
    ],
    imports: [

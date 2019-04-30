@@ -16,8 +16,9 @@ export class MemberEditComponent implements OnInit {
   @ViewChild('editForm') editForm:NgForm;
   user:User;
   photoUrl:string;
-
-
+  created:string;
+  options={weekday:'long', year:'numeric', month:'long',day:'numeric'};
+ 
   //--> pour affiche un message avant de fermer la page
   @HostListener('window:beforeunload',['$event'])
  unLoadNotification($event:any){
@@ -28,13 +29,16 @@ export class MemberEditComponent implements OnInit {
 
   constructor(private route:ActivatedRoute,private alertify:AlertifyService, private userService:UserService, private authService:AuthService) { }
 
-  ngOnInit() {
+  ngOnInit()
+   {
     this.route.data.subscribe(data=>{
       this.user=data['user']
     });
 
     this.authService.currentPhotoUrl.subscribe(photoUrl=>this.photoUrl=photoUrl);
 
+    this.created=new Date(this.user.created).toLocaleString('fr-fr',this.options);
+   
   }
 
   updateUser(){

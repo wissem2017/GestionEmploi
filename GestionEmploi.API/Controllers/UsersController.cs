@@ -12,14 +12,16 @@ using System.Text;
 using System;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
-
-
+using GestionEmploi.API.Helpers;
 
 namespace GestionEmploi.API.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+
+    
     public class UsersController : ControllerBase
     {
         private readonly IEmploiRepository _repo;

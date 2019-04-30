@@ -14,6 +14,11 @@ export class MemberDetailComponent implements OnInit {
   user:User
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
+  created:string;
+  age:string;
+  showIntro:boolean=true;
+  showLook:boolean=true;
+  options={weekday:'long', year:'numeric', month:'long',day:'numeric'};
 
   constructor(private userService:UserService,private alertify:AlertifyService, private route:ActivatedRoute) { }
 
@@ -35,6 +40,9 @@ export class MemberDetailComponent implements OnInit {
 
       //--> Caractéristique de galerie image
       this.galleryImages=this.getImages();
+      this.created=new Date(this.user.created).toLocaleString('fr-fr',this.options);
+      this.showIntro=true;
+      this.showLook=true;
   }
 
 //--> Méthode permet de retourner la liste des image users

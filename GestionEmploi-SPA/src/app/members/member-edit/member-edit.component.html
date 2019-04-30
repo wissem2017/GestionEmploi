@@ -23,11 +23,11 @@
           </div>
           <div>
             <strong>Dernière apparition : </strong>
-            <p>{{user.lastActive}}</p>
+            <p>{{user.lastActive | timeAgo}}</p>
           </div>
           <div>
             <strong>Adhéré depuis :</strong>
-            <p>{{user.created}}</p>
+            <p>{{created}}</p>
           </div>
         </div>
         <div class="card-footer">
@@ -48,7 +48,7 @@
                     <h4 style="color: white">Je me présente </h4>
                   </div>
                   <div class="card-text mt-3 p-2">
-                    <textarea name="introduction" [(ngModel)]="user.introduction"   class="form-control border-white"></textarea>
+                    <textarea name="intoduction" [(ngModel)]="user.intoduction"   class="form-control border-white"></textarea>
                   </div>
             </div>
           

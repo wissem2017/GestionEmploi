@@ -14,6 +14,7 @@ namespace GestionEmploi.API.Dtos
         public DateTime Created { get; set; } //Date de création Compte
         public DateTime LastActive { get; set; }//Dernière Accssé
         public string Intoduction { get; set; } //Présentation de chercheur
+         public string interests { get; set; } 
         public string LookingFor { get; set; } //Poste chercher
         public string City { get; set; }
         public string  Country { get; set; }
