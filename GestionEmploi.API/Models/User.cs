@@ -16,6 +16,7 @@ namespace GestionEmploi.API.Models
         public DateTime LastActive { get; set; }//Dernière Accssé
         public string Intoduction { get; set; } //Présentation de chercheur
         public string LookingFor { get; set; } //Poste chercher
+        public string interests { get; set; }
         public string City { get; set; }
         public string  Country { get; set; }
         public ICollection<Photo> Photos { get; set; }

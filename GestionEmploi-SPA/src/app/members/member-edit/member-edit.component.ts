@@ -14,7 +14,9 @@ import { AuthService } from 'src/app/_services/auth.service';
 export class MemberEditComponent implements OnInit {
 
   @ViewChild('editForm') editForm:NgForm;
-  user:User
+  user:User;
+  photoUrl:string;
+
 
   //--> pour affiche un message avant de fermer la page
   @HostListener('window:beforeunload',['$event'])
@@ -29,7 +31,10 @@ export class MemberEditComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe(data=>{
       this.user=data['user']
-    })
+    });
+
+    this.authService.currentPhotoUrl.subscribe(photoUrl=>this.photoUrl=photoUrl);
+
   }
 
   updateUser(){
@@ -40,6 +45,10 @@ export class MemberEditComponent implements OnInit {
       this.editForm.reset(this.user);
     },error=>this.alertify.error(error))
     
+  }
+
+  updateMainPhoto(photoUrl){
+    this.user.photoUrl=photoUrl;
   }
    
 

@@ -16,7 +16,7 @@ namespace GestionEmploi.API.Data
         public async Task<User> Login(string username, string password)
         {
             //chercher l'existance de l'utilisateur
-           var user=await _context.Users.FirstOrDefaultAsync(x=>x.Username==username); 
+           var user=await _context.Users.Include(p=>p.Photos).FirstOrDefaultAsync(x=>x.Username==username); 
            if (user==null) return null; //si username n'existe pas retourne null
 
            if(!VerifyPasswordHash(password,user.PasswordSalt,user.PasswordHash))

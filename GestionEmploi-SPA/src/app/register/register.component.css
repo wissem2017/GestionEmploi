@@ -12,4 +12,7 @@
     color: black !important;
     background:rgb(3, 233, 3) !important
 }
+[type="radio"]:before{
+  position:initial;
+}
 

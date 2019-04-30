@@ -43,6 +43,8 @@ namespace GestionEmploi.API
             
             services.AddCors(); //--> Pour avoir l'autorisation de angular d'utiliser service API
 
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+
             services.AddAutoMapper();
 
             services.AddTransient<TrialData>();//--> pour faire l'ajout légère des donnée de test

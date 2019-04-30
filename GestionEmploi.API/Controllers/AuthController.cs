@@ -10,6 +10,7 @@ using System;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 namespace GestionEmploi.API.Controllers
 {
@@ -20,8 +21,10 @@ namespace GestionEmploi.API.Controllers
     {
         private readonly IAuthRepository _repo;
         private readonly IConfiguration _config;
-        public AuthController(IAuthRepository repo,IConfiguration config)
+        private readonly IMapper _mapper;
+        public AuthController(IAuthRepository repo,IConfiguration config, IMapper mapper)
         {
+            _mapper = mapper;
             _config = config;
             _repo = repo;
 
@@ -33,10 +36,13 @@ namespace GestionEmploi.API.Controllers
              userForRegisterDto.Username=userForRegisterDto.Username.ToLower(); //--> Convertir en miniscule
              if (await _repo.UserExists(userForRegisterDto.Username)) return BadRequest("Cet utilisateur exist déjà");
 
-             var userToCreate = new User{Username=userForRegisterDto.Username};
+             var userToCreate = _mapper.Map<User>(userForRegisterDto);
+
              var CreatedUser= await _repo.register(userToCreate,userForRegisterDto.Password);
 
-            return StatusCode(201);
+             var userToReturn=_mapper.Map<UserForDetailsDto>(CreatedUser);
+
+            return CreatedAtRoute("GetUser",new {contrommer="Users",id=CreatedUser.Id},userToReturn);
         }
 
 
@@ -68,9 +74,12 @@ namespace GestionEmploi.API.Controllers
             var tokenHandler= new JwtSecurityTokenHandler();
             var token=tokenHandler.CreateToken(tokenDescriptor);
 
+            var user =_mapper.Map<UserForListDto>(userFromRepo);
+
             //--> Retourn Token
             return Ok(new {
-                token=tokenHandler.WriteToken(token)
+                token=tokenHandler.WriteToken(token),
+                user
                 });          
         }
     }

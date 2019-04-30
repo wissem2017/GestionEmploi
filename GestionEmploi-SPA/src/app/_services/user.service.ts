@@ -29,6 +29,16 @@ udpateUser(id:number, user:User){
   return this.http.put(this.baseUrl+id,user);
 }
 
+//-->Permet de modifier photo principale
+setMainPhoto(userId:number, id:number){
+  return this.http.post(this.baseUrl+ userId+'/photos/'+id+'/setMain',{});
+}
+
+//--> Permet de supprimer photo user
+deletePhoto(userId:number, id:number){
+  return this.http.delete(this.baseUrl+userId+'/photos/'+id);
+}
+
 
 
 }

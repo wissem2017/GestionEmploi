@@ -11,6 +11,10 @@ namespace GestionEmploi.API.Data
          Task<bool> SaveAll();
          Task<IEnumerable<User>> GetUsers(); //--> Méthode permet de retouner tous 
          Task<User> GetUser(int id);
+         Task<Photo> GetPhoto(int id);//--> Permet de retourner photo selon id
+         Task<Photo> GetMainPhotoForUser( int userId); //--> Retourner la photo principale
+
+
 
 
          

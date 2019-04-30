@@ -25,6 +25,12 @@ namespace GestionEmploi.API.Helpers
            // CreateMap<FileUser,FileUserForDetailsDto>();
            
            CreateMap<UserForUpdateDto,User>();
+
+           CreateMap<Photo,PhotoForReturnDto>();
+
+           CreateMap<PhotoForCreateDto,Photo>();
+           CreateMap<UserForRegisterDto,User>();
+
         }
     }
 }

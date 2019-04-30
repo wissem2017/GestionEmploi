@@ -11,7 +11,7 @@
         </div>
     <div class="col-sm-4 mt-3">
       <div class="card">
-        <img class="card-img-top img-thumbnail" src="{{user.photoUrl}}" alt="{{user.username}}">
+        <img class="card-img-top img-thumbnail" src="{{photoUrl || 'assets/user.png'}}" alt="{{user.username}}">
         <div class="card-body">
           <div>
             <strong>Adresse : </strong>
@@ -87,7 +87,7 @@
             </form>
           </tab>
       <tab heading="Mes photos">
-        <p>Ici on régler les photos</p>
+        <app-photo-editor  (getMemberPhotoChange)="updateMainPhoto($event)" [photos]="user.photos"></app-photo-editor>
 
         <!--<ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery> -->
       </tab>
