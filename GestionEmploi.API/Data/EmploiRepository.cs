@@ -26,6 +26,12 @@ namespace GestionEmploi.API.Data
             _context.Remove(entity);
         }
 
+        public async Task<Like> GetLike(int userId, int recipientId)
+        {
+            //--> Vérifier si Like existe déjà dans Likes
+            return await _context.Likes.FirstOrDefaultAsync(l=>l.LikerId==userId && l.LikeeId==recipientId);
+        }
+
         //--> Retourner Photos Principale user
         public async Task<Photo> GetMainPhotoForUser(int userId)
         {
@@ -53,6 +59,19 @@ namespace GestionEmploi.API.Data
 
             users=users.Where(u=>u.Geder==userParams.Gender); //--> choisir juste les genre inverse(homme/femme)
 
+            //--> afficher la liste des Likees ou likers
+            if(userParams.Likers)
+            {
+                var userLikers=await GetUserLikes(userParams.UserId,userParams.Likers);
+                users=users.Where(u=>userLikers.Contains(u.Id));
+            }
+
+            if(userParams.Likees)
+            {
+                 var userLikees=await GetUserLikes(userParams.UserId,userParams.Likers);
+                users=users.Where(u=>userLikees.Contains(u.Id));
+            }
+
             //--> Filter selon l'age
             if(userParams.MinAge!=18 || userParams.MaxAge!=99)
             {
@@ -77,6 +96,20 @@ namespace GestionEmploi.API.Data
 
 
             return await PagedList<User>.CreateAsync(users,userParams.PageNumber,userParams.PageSize);
+        }
+
+        private async Task<IEnumerable<int>> GetUserLikes(int id, bool Likers)
+        {
+            var user= await _context.Users.Include(u=>u.Likers).Include(u=>u.Likees).FirstOrDefaultAsync(u=>u.Id==id);
+
+            if (Likers)
+            {
+                return user.Likers.Where(u=>u.LikeeId==id).Select(l=>l.LikerId);
+            }
+            else
+            {
+                return user.Likees.Where(u=>u.LikerId==id).Select(l=>l.LikeeId);
+            }
         }
 
         public async Task<bool> SaveAll()

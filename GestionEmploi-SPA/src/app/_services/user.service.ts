@@ -17,7 +17,7 @@ export class UserService {
 constructor(private http:HttpClient) { }
 
 //--> Méthode permet de retourner la liste des users sous forme tables User selon pagination
-getUsers(page?,itemsPerPage?,userParams?):Observable<PaginationResult<User[]>>
+getUsers(page?,itemsPerPage?,userParams?,likeParam?):Observable<PaginationResult<User[]>>
 {
   const paginationResult : PaginationResult<User[]> = new PaginationResult<User[]>();
   let params = new HttpParams();
@@ -35,6 +35,14 @@ getUsers(page?,itemsPerPage?,userParams?):Observable<PaginationResult<User[]>>
     params = params.append('orderBy',userParams.orderBy);
   }
 
+  if(likeParam==='Likers')
+  {
+    params = params.append('likers', 'true');
+  }
+  if(likeParam==='Likees')
+  {
+    params = params.append('likees', 'true');
+  }
 
 
   return this.http.get<User[]>(this.baseUrl,{observe:'response',params}).pipe(
@@ -69,6 +77,10 @@ deletePhoto(userId:number, id:number){
   return this.http.delete(this.baseUrl+userId+'/photos/'+id);
 }
 
-
+//--> Ajouter Like
+sendLike(id:number,recipientId:number)
+{
+  return this.http.post(this.baseUrl+id+'/like/'+recipientId,{});
+}
 
 }

@@ -78,6 +78,33 @@ namespace GestionEmploi.API.Controllers
 
             //-->On cas d'erreur de connexion
             throw new Exception($"Il y a une erreur dans la mise à jour des données pour l'adhérant numéro {id}");
+        }
+
+        //--> Ajout Like
+        [HttpPost("{id}/like/{recipientId}")]
+        public async Task<IActionResult> LikeUser(int id, int recipientId)
+        {
+             if(id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            return Unauthorized();
+
+            var like=await _repo.GetLike(id,recipientId);
+            if(like!=null)
+            return BadRequest("Tu est admiré cet abonné avant");
+
+            //-->Vérifier l'existance de recieientId
+           if(await _repo.GetUser(recipientId)==null)
+             return NotFound();
+
+            //-->Ajouter Like
+            like=new Like{
+                LikerId=id,
+                LikeeId=recipientId
+            };
+            _repo.Add<Like>(like); //--> Ajout dans la mémoire
+            if(await _repo.SaveAll())
+            return Ok();
+
+            return BadRequest("Défaut d'admirer");
 
 
 

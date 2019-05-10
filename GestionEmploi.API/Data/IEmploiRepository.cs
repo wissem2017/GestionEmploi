@@ -14,11 +14,7 @@ namespace GestionEmploi.API.Data
          Task<User> GetUser(int id);
          Task<Photo> GetPhoto(int id);//--> Permet de retourner photo selon id
          Task<Photo> GetMainPhotoForUser( int userId); //--> Retourner la photo principale
-
-
-
-
-         
+         Task<Like> GetLike(int userId,int recipientId)     ;//-->faire la laison entre les likers
 
 
     }
