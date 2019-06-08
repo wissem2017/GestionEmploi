@@ -13,7 +13,9 @@ namespace GestionEmploi.API.Data
         public DbSet<Photo> Photos { get; set; }
         public DbSet<FileUser> FileUsers { get; set; }
         public DbSet<Like> Likes { get; set; }
+         public DbSet<Message> Messages { get; set; }
         protected override void OnModelCreating(ModelBuilder builder){
+           //--> Faire la relation n to n entre User et Like
             builder.Entity<Like>()
             .HasKey(k=>new {k.LikerId,k.LikeeId});
             builder.Entity<Like>()
@@ -29,6 +31,18 @@ namespace GestionEmploi.API.Data
             .WithMany(u=>u.Likees)
             .HasForeignKey(l=>l.LikerId)
             .OnDelete(DeleteBehavior.Restrict);
+
+            //-->Faire la relation N to N entre User et Message
+            builder.Entity<Message>()
+            .HasOne(m=>m.Sender)
+            .WithMany(u=>u.MessageSent)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+            .HasOne(r=>r.Recipient)
+            .WithMany(u=>u.MessageReceived)
+            .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

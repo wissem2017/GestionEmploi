@@ -20,6 +20,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using GestionEmploi.API.Helpers;
 using AutoMapper;
+using GestionEmploi.API.Models;
 
 namespace GestionEmploi.API
 {
@@ -42,6 +43,8 @@ namespace GestionEmploi.API
             });
             
             services.AddCors(); //--> Pour avoir l'autorisation de angular d'utiliser service API
+
+            services.AddSignalR();//--> renvoie l'envoye de message en réel time
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
@@ -94,7 +97,11 @@ namespace GestionEmploi.API
 
             // app.UseHttpsRedirection();
             // trialData.TrialUsers(); //--> Ajout données de test
-            app.UseCors(x=>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); //--> Avoir une autorisation pour tous le monde
+            app.UseCors(x=>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials()); //--> Avoir une autorisation pour tous le monde
+
+            app.UseSignalR(routes => {
+                routes.MapHub<ChatHub>("/chat");
+            });
             
             app.UseAuthentication();//--> Tester l'autorisation
             app.UseMvc();

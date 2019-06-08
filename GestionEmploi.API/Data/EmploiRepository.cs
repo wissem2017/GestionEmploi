@@ -117,5 +117,54 @@ namespace GestionEmploi.API.Data
             return await _context.SaveChangesAsync()>0;
             //--> s'il y a une sauvgarde donc return >0 sinon 0<
         }
+
+        public async Task<Message> GetMessage(int id)
+        {
+           return await _context.Messages.FirstOrDefaultAsync(m=>m.Id==id);
+        }
+
+        public  async Task<PagedList<Message>> GetMessagesforUser(MessageParams messageParams)
+        {
+            var messages= _context.Messages.Include(m=>m.Sender).ThenInclude(u=>u.Photos).Include(m=>m.Recipient).ThenInclude(u=>u.Photos).AsQueryable();
+
+            switch (messageParams.MessageType)
+            {
+                //Liste des message réçu
+                case "Inbox":
+                messages=messages.Where(m=>m.RecipientId==messageParams.UserId && m.RecipientDeleted==false);
+                break;
+
+                //Liste des message envoyés
+                case "Outbox":
+                messages=messages.Where(m=>m.SenderId==messageParams.UserId && m.SenderDeleted==false);
+                break;
+
+                //liste des message non lues
+                default:
+                messages=messages.Where(m=>m.RecipientId==messageParams.UserId && m.RecipientDeleted==false && m.IsRead==false);
+                break;
+            }
+
+            //trier la liste des messages par date
+            messages=messages.OrderByDescending(m=>m.MessageSent);
+
+            return await PagedList<Message>.CreateAsync(messages,messageParams.PageNumber,messageParams.PageSize);
+        }
+
+        //-->Pour gérer la conversation entre users
+        public  async Task<IEnumerable<Message>> GetConversation(int userId, int recipientId)
+        {
+            var messages=await  _context.Messages.Include(m=>m.Sender).ThenInclude(u=>u.Photos).Include(m=>m.Recipient).ThenInclude(u=>u.Photos).Where(m=>m.RecipientId==userId && m.RecipientDeleted==false && m.SenderId==recipientId || m.RecipientId==recipientId && m.SenderDeleted==false && m.SenderId==userId).OrderByDescending(m=>m.MessageSent).ToListAsync();
+            return messages;
+        }
+
+        //-->Retourne le nbre de message non lues
+        public async Task<int> GetUnreadMessagesForUser(int userId)
+        {
+            var messages = await _context.Messages.Where(m => m.IsRead == false && m.RecipientId == userId).ToListAsync();
+            var count = messages.Count();
+            return count;
+
+        }
     }
 }
