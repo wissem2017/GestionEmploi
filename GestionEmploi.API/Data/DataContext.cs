@@ -14,6 +14,10 @@ namespace GestionEmploi.API.Data
         public DbSet<FileUser> FileUsers { get; set; }
         public DbSet<Like> Likes { get; set; }
          public DbSet<Message> Messages { get; set; }
+
+         public DbSet<Payment> Payments { get; set; }
+        
+        
         protected override void OnModelCreating(ModelBuilder builder){
            //--> Faire la relation n to n entre User et Like
             builder.Entity<Like>()

@@ -1,0 +1,33 @@
+<div [hidden]="successPaid">
+  <h2>Désolé .. Ce service est payant, vous pouvez vous abonner maintenant</h2>
+  <form #checkout="ngForm" (ngSubmit)="onSubmit(checkout)" class="checkout">
+    <div class="text-center">
+      <h4> Abonnement à vie ... seulement cinquante dollars</h4>
+      <div class="mt-4" id="card-info" #cardInfo></div>
+  
+      <div id="card-errors" role="alert" *ngIf="error">{{ error }}</div>
+    </div>
+    <button (click)="load()" class="btn btn-primary" type="submit">
+    
+     <span [hidden]="loader">
+       Inscrivez-vous avec nous
+      <i class="fa fa-cc-visa mr-1"></i>
+      <i class="fa fa-cc-mastercard"></i>
+     </span> 
+     
+     <span [hidden]="!loader">
+        Attends un peu
+        <div  class="loader float-left ml-1">
+        </div>
+      </span>
+     
+     </button>    
+  </form>
+  </div>
+   <div [hidden]="!successPaid" class="checkout">
+    <h4>   Votre abonnement à vie a été activé avec succès    </h4>
+    <br>
+    <h4>   Attendez un peu pour être redirigé vers le service ou cliquez sur Retour  </h4>
+  </div>
+  
+  <button  class="btn btn-dark ajs-button " (click)="backClicked();" >  Retour <i class="fa fa-arrow-left"></i></button>

@@ -31,5 +31,8 @@ namespace GestionEmploi.API.Data
 
         Task<int> GetUnreadMessagesForUser(int userId);//-->Retourne le nbre des messages non lues
 
+        Task<Payment> GetPaymentForUser(int userId);
+        
+
     }
 }

@@ -21,6 +21,7 @@ using Microsoft.IdentityModel.Tokens;
 using GestionEmploi.API.Helpers;
 using AutoMapper;
 using GestionEmploi.API.Models;
+using Stripe;
 
 namespace GestionEmploi.API
 {
@@ -48,6 +49,8 @@ namespace GestionEmploi.API
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+
             services.AddAutoMapper();
 
             services.AddTransient<TrialData>();//--> pour faire l'ajout légère des donnée de test
@@ -74,6 +77,8 @@ namespace GestionEmploi.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,TrialData trialData )
         {
+            StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe:SecretKey").Value);
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -20,6 +20,8 @@ export class AuthService {
 
   currentUser:User;
 
+  paid:boolean=false;
+
   photoUrl=new BehaviorSubject<string>('../../assets/user.png');//--> Photo par défaux
   currentPhotoUrl=this.photoUrl.asObservable();
 

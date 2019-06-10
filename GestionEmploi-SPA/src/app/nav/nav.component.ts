@@ -23,12 +23,15 @@ export class NavComponent implements OnInit {
     this.authService.currentPhotoUrl.subscribe(
       photoUrl=>this.photoUrl=photoUrl);
 
-     this.userService.getUnreadCount(this.authService.decodedToken.nameid).subscribe(
-      res=>{this.authService.unreadCount.next(res.toString());
-      this.authService.latestUnreadCount.subscribe(res=>{this.count=res});
+      if(this.loggedIn){
+        this.userService.getUnreadCount(this.authService.decodedToken.nameid).subscribe(
+          res=>{this.authService.unreadCount.next(res.toString());
+          this.authService.latestUnreadCount.subscribe(res=>{this.count=res});
+          }
+         );
+        this.getPaymentForUser();
       }
-     );
-
+     
      this.hubConnection = new HubConnectionBuilder().withUrl("http://localhost:5000/chat").build();
     this.hubConnection.start();
     this.hubConnection.on('count', () => {
@@ -49,6 +52,7 @@ export class NavComponent implements OnInit {
        this.userService.getUnreadCount(this.authService.decodedToken.nameid).subscribe(res=>{
         this.authService.unreadCount.next(res.toString());
         this.authService.latestUnreadCount.subscribe(res=>{this.count=res;});
+        this.getPaymentForUser();
              });	
       },
       error=>{this.alertify.error(error)},
@@ -65,12 +69,27 @@ export class NavComponent implements OnInit {
     //--> Supprimer token lors de déconnexion
     localStorage.removeItem('token');
     this.authService.decodedToken=null;
-
+    
+    this.authService.paid=false;
+    
     localStorage.removeItem('user');
     this.authService.currentUser=null
     
     this.alertify.message('Déconnexion avec success');
     this.router.navigate(['/home']); //--> Retourner vers page Home
+  }
+
+  //Méthode permet de vérifier si user à payer ses frais
+  getPaymentForUser()
+  {
+    this.userService.getPaymentForUser(this.authService.currentUser.id).subscribe(
+      res=>{
+        if(res !=null)
+          this.authService.paid=true;
+        else
+        this.authService.paid=false;
+      }
+    )
   }
 
 }
