@@ -12,5 +12,6 @@ namespace GestionEmploi.API.Models
         public string PublicId { get; set; }
         public User User { get; set; } //Pour faire la laison avec Class User
         public int UserId { get; set; }//Clé étranger de table User
+        public bool IsApproved {get; set;}
     }
 }

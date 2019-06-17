@@ -14,8 +14,6 @@ using Microsoft.Extensions.Options;
 
 namespace GestionEmploi.API.Controllers
 {
-
-     [Authorize]
     [Route("api/users/{userId}/photos")]
     [ApiController]
     public class PhotosController : ControllerBase
@@ -60,7 +58,7 @@ namespace GestionEmploi.API.Controllers
             return Unauthorized();
 
             //--> Récupérer les donner de user
-            var userFromRepo=await _repo.GetUser(userId);
+            var userFromRepo=await _repo.GetUser(userId,true);
 
             var file=photoForCreateDto.File;
             var uploadResult= new ImageUploadResult();
@@ -107,7 +105,7 @@ namespace GestionEmploi.API.Controllers
             return Unauthorized();
 
             //--> Récupérer les donner de user
-            var userFromRepo=await _repo.GetUser(userId);
+            var userFromRepo=await _repo.GetUser(userId,true);
 
             //--> Vérifier que photo appartient aux photos user
             if(!userFromRepo.Photos.Any(p=>p.Id==id))
@@ -140,7 +138,7 @@ namespace GestionEmploi.API.Controllers
             return Unauthorized();
 
             //--> Récupérer les donner de user
-            var userFromRepo=await _repo.GetUser(userId);
+            var userFromRepo=await _repo.GetUser(userId,true);
 
              //--> Vérifier que photo appartient aux photos user
             if(!userFromRepo.Photos.Any(p=>p.Id==id))

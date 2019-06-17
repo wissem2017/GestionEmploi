@@ -16,11 +16,8 @@ namespace GestionEmploi.API.Data
         public async Task<User> Login(string username, string password)
         {
             //chercher l'existance de l'utilisateur
-           var user=await _context.Users.Include(p=>p.Photos).FirstOrDefaultAsync(x=>x.Username==username); 
+           var user=await _context.Users.Include(p=>p.Photos).FirstOrDefaultAsync(x=>x.UserName==username); 
            if (user==null) return null; //si username n'existe pas retourne null
-
-           if(!VerifyPasswordHash(password,user.PasswordSalt,user.PasswordHash))
-           return null;
 
            return user;
 
@@ -47,10 +44,6 @@ namespace GestionEmploi.API.Data
             byte[] passwordHash,passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt); //méthode permet de créer passwordHash et passwordSalt
             
-            //ajout passwordHash et passwordSalt à l'instance user
-            user.PasswordHash=passwordHash;
-            user.PasswordSalt=passwordSalt;
-
             await _context.Users.AddAsync(user);//ajout user
             await _context.SaveChangesAsync(); //sauvgarder l'ajout
 
@@ -71,7 +64,7 @@ namespace GestionEmploi.API.Data
 
         public async Task<bool> UserExists(string username)
         {
-            if(await _context.Users.AnyAsync(x=>x.Username==username)) return true;
+            if(await _context.Users.AnyAsync(x=>x.UserName==username)) return true;
             return false;
 
         }

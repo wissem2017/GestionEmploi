@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"; //--> Permet de faire la laison entre page HTML et component
-import { BsDropdownModule, TabsModule, BsDatepickerModule, PaginationModule, ButtonsModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, BsDatepickerModule, PaginationModule, ButtonsModule, ModalModule } from 'ngx-bootstrap';
 import { RouterModule } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgxGalleryModule } from 'ngx-gallery';
@@ -38,6 +38,12 @@ import { ListsResolver } from './_resolvers/lists.resolver';
 import { MessageResolver } from './_resolvers/message.resolver';
 import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
 import { PaymentComponent } from './payment/payment.component';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { HasRoleDirective } from './_directives/has-role.directive';
+import { UserManagmentComponent } from './admin/user-managment/user-managment.component';
+import { PhotoManagementComponent } from './admin/photo-management/photo-management.component';
+import { AdminService } from './_services/admin.service';
+import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 
 
 
@@ -63,7 +69,12 @@ export function tokenGetter(){
       TimeAgoPipe,
       PhotoEditorComponent,
       MemberMessagesComponent,
-      PaymentComponent
+      PaymentComponent,
+      AdminPanelComponent,
+      HasRoleDirective,
+      UserManagmentComponent,
+      PhotoManagementComponent,
+      RolesModalComponent
    ],
    imports: [
       BrowserModule,
@@ -76,6 +87,7 @@ export function tokenGetter(){
       TabsModule.forRoot(),
       BsDatepickerModule.forRoot(),
       ButtonsModule,
+      ModalModule.forRoot(),
       NgxGalleryModule,
       PaginationModule.forRoot(),
       JwtModule.forRoot({
@@ -97,8 +109,10 @@ export function tokenGetter(){
       PreventUnsavedChangesGuard,
       MemberlistResolver,
       ListsResolver,
-      MessageResolver
+      MessageResolver,
+      AdminService
    ],
+   entryComponents:[RolesModalComponent], 
    bootstrap: [
       AppComponent
    ]

@@ -22,6 +22,9 @@ using GestionEmploi.API.Helpers;
 using AutoMapper;
 using GestionEmploi.API.Models;
 using Stripe;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace GestionEmploi.API
 {
@@ -38,8 +41,45 @@ namespace GestionEmploi.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x=>x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            //---> Définir l'identité User  IdentityCore
+            IdentityBuilder builder=services.AddIdentityCore<User>(opt=>{
+                opt.Password.RequireDigit=false;
+                opt.Password.RequiredLength=4;
+                opt.Password.RequireNonAlphanumeric=false;
+                opt.Password.RequireUppercase=false;            
+            });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(option =>{
+            builder=new IdentityBuilder(builder.UserType,typeof(Role),builder.Services);
+            builder.AddEntityFrameworkStores<DataContext>();
+            builder.AddRoleValidator<RoleValidator<Role>>();
+            builder.AddRoleManager<RoleManager<Role>>();
+            builder.AddSignInManager<SignInManager<User>>();
+
+             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(Options=>{
+                Options.TokenValidationParameters=new TokenValidationParameters{
+                    ValidateIssuerSigningKey=true,
+                    IssuerSigningKey=new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                    ValidateIssuer=false,
+                    ValidateAudience= false
+                };
+            });
+            //---------------------------------------------------------
+            //-->Ajouter Policy pour crétère d'accée
+            services.AddAuthorization(
+                options=>{
+                    options.AddPolicy("RequireAdminRole",policy=>policy.RequireRole("Admin"));
+                    options.AddPolicy("ModeratePhotoRole",policy=>policy.RequireRole("Admin","Moderator"));
+                    options.AddPolicy("VipOnly",policy=>policy.RequireRole("VIP"));
+                }
+            );
+
+            services.AddMvc(options=>{
+                var policy=new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(option =>{
                 option.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
             
@@ -52,32 +92,23 @@ namespace GestionEmploi.API
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
 
             services.AddAutoMapper();
-
+            // Mapper.Reset();
+           
             services.AddTransient<TrialData>();//--> pour faire l'ajout légère des donnée de test
 
-            services.AddScoped<IAuthRepository,AuthRepository>();
-            
             services.AddScoped<IEmploiRepository,EmploiRepository>(); //Ajouter l'exécution de service pour EmploiRepository
 
             services.AddScoped<LogUserActivity>();//--> Ajouter service pour filter
            
             //--> Ajout service d'autorisation  MiddleWare
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(Options=>{
-                Options.TokenValidationParameters=new TokenValidationParameters{
-                    ValidateIssuerSigningKey=true,
-                    IssuerSigningKey=new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-                    ValidateIssuer=false,
-                    ValidateAudience= false
-                };
-            });
+           
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,TrialData trialData )
         {
-            StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe:SecretKey").Value);
+           StripeConfiguration.SetApiKey(Configuration.GetSection("Stripe:SecretKey").Value);
             
             if (env.IsDevelopment())
             {
@@ -101,7 +132,7 @@ namespace GestionEmploi.API
             }
 
             // app.UseHttpsRedirection();
-            // trialData.TrialUsers(); //--> Ajout données de test
+           // trialData.TrialUsers(); //--> Ajout données de test
             app.UseCors(x=>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials()); //--> Avoir une autorisation pour tous le monde
 
             app.UseSignalR(routes => {
@@ -111,5 +142,7 @@ namespace GestionEmploi.API
             app.UseAuthentication();//--> Tester l'autorisation
             app.UseMvc();
         }
+
+      
     }
 }

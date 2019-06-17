@@ -2,10 +2,10 @@ import { Photo } from "./photo";
 
 export interface User {
     id:number;
-    username:string;
+    userName:string;
     knownAs:string;
     age:number;
-    gender:string;
+    geder:string;
     created:Date;
     lastActive:String;
     photoUrl:string;
@@ -15,4 +15,5 @@ export interface User {
     intoduction?:string;
     lookingFor?:string;
     photos?:Photo[];
+    roles?:string[];
 }

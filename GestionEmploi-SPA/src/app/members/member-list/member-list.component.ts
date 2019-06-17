@@ -18,7 +18,8 @@ export class MemberListComponent implements OnInit {
   pagination:Pagination;
   search:boolean=false;
 
-  constructor(private userService:UserService, private alertify:AlertifyService, private route:ActivatedRoute) { }
+  constructor(private userService: UserService, private route: ActivatedRoute,
+    private alertify: AlertifyService) { }
 
   ngOnInit() {
     // this.loadUsers();
@@ -29,7 +30,7 @@ export class MemberListComponent implements OnInit {
       this.pagination=data['users'].pagination}
     );
 
-    this.userParams.gender=this.user.gender==='homme'?'femme':'homme';
+    this.userParams.gender=this.user.geder==='homme'?'femme':'homme';
     this.userParams.minAge=18;
     this.userParams.maxAge=99;
     this.userParams.orderBy='lastActive';
@@ -37,7 +38,7 @@ export class MemberListComponent implements OnInit {
 
 //--> retourner filter par défaut
   resetFilter(){
-    this.userParams.gender=this.user.gender==='homme'?'femme':'homme';
+    this.userParams.gender=this.user.geder==='homme'?'femme':'homme';
     this.userParams.minAge=18;
     this.userParams.maxAge=99;
     this.loadUsers();
@@ -48,7 +49,12 @@ export class MemberListComponent implements OnInit {
     this.loadUsers();
   }
 
-  loadUsers(){
+ 
+  loadUsers() {
+    
+    if (!this.search) {
+      this.pagination.currentPage=1;
+       }
 
     this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage,this.userParams).subscribe((res: PaginationResult<User[]>) => {
       this.users = res.result;
@@ -57,6 +63,7 @@ export class MemberListComponent implements OnInit {
     },
       error => this.alertify.error(error)
     );
+
   }
 
 }

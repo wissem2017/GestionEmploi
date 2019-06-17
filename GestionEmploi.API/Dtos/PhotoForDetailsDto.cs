@@ -9,6 +9,7 @@ namespace GestionEmploi.API.Dtos
         public string Description { get; set; }
         public DateTime  DateAdded { get; set; }
         public bool IsMain { get; set; } //si la photos initial
+        public bool IsApproved { get; set; }
                 
     }
 }

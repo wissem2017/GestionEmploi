@@ -15,7 +15,7 @@ namespace GestionEmploi.API.Data
 
          Task<PagedList<User>> GetUsers(UserParams userParams); //--> Méthode permet de retouner tous selon Pagination
 
-         Task<User> GetUser(int id);
+         Task<User> GetUser(int id,bool isCurrentUser);
 
          Task<Photo> GetPhoto(int id);//--> Permet de retourner photo selon id
 

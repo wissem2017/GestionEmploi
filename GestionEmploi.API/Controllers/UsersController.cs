@@ -19,7 +19,6 @@ using Stripe;
 namespace GestionEmploi.API.Controllers
 {
     [ServiceFilter(typeof(LogUserActivity))]
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
 
@@ -41,7 +40,7 @@ namespace GestionEmploi.API.Controllers
         public async Task<IActionResult> GetUsers([FromQuery]UserParams userParams)
         {
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value); //--> retourner ID de User connecté
-            var userFromRepo = await _repo.GetUser(currentUserId);//--> Retourner tous les infos de user connecté
+            var userFromRepo = await _repo.GetUser(currentUserId,true);//--> Retourner tous les infos de user connecté
             userParams.UserId = currentUserId;
 
             //--> Tester si genre exist dans user
@@ -61,7 +60,8 @@ namespace GestionEmploi.API.Controllers
         [HttpGet("{id}", Name = "GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _repo.GetUser(id);
+            var isCurrentUser=int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)==id;
+            var user = await _repo.GetUser(id,isCurrentUser);
             //--> Faire la laison avec DTO
             var userToReturn = _mapper.Map<UserForDetailsDto>(user);
             return Ok(userToReturn);
@@ -73,7 +73,7 @@ namespace GestionEmploi.API.Controllers
             if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
 
-            var userFromRepo = await _repo.GetUser(id);
+            var userFromRepo = await _repo.GetUser(id,true);
 
             _mapper.Map(userForUpdateDto, userFromRepo);
 
@@ -99,7 +99,7 @@ namespace GestionEmploi.API.Controllers
                 return BadRequest("Tu est admiré cet abonné avant");
 
             //-->Vérifier l'existance de recieientId
-            if (await _repo.GetUser(recipientId) == null)
+            if (await _repo.GetUser(recipientId,false) == null)
                 return NotFound();
 
             //-->Ajouter Like
@@ -126,21 +126,6 @@ namespace GestionEmploi.API.Controllers
             
             var customers = new CustomerService();
             var charges = new ChargeService();
-			
-            // var options = new TokenCreateOptions
-            // {
-            // Card = new CreditCardOptions
-            //     {
-            //         // Number = "4242424242424242",
-            //         // ExpYear = 2020,
-            //         // ExpMonth = 3,
-            //         // Cvc = "123"
-            //     }
-            // };
-
-            // var service = new TokenService();
-            // Token stripeToken = service.Create(options);
-
             var customer = customers.Create(new CustomerCreateOptions {
                // SourceToken = stripeToken
                Source = stripeToken

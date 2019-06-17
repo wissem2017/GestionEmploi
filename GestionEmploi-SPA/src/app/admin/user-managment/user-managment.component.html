@@ -1,0 +1,16 @@
+<div class="row">
+  <table class="table">
+    <tr>
+      <th style="width: 10%">Identifiant </th>
+      <th style="width: 30%">Nom Utilisateur </th>
+      <th style="width: 40%">Rôles </th>
+      <th style="width: 20%"></th>
+    </tr>
+    <tr *ngFor="let user of users">
+      <td>{{user.id}}</td>
+      <td>{{user.userName}}</td>
+      <td><span class="role-badge" *ngFor="let role of user.roles">{{role}}</span></td>
+      <td><button (click)="editRolesModal(user);" class="btn ajs-button ajs-header">Modifier les rôles </button></td>
+    </tr>
+  </table>
+  </div>

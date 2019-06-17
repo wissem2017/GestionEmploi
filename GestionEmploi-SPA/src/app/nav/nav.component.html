@@ -1,4 +1,4 @@
-<nav class="rtl navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
   <a style="margin-top:-10px;color:rgb(3, 233, 3);
 font-family:Longhaul;font-size:2.25rem;font-weight:bolder" class="navbar-brand"
    [routerLink]="['']" >EmploiNet</a>
@@ -18,7 +18,11 @@ font-family:Longhaul;font-size:2.25rem;font-weight:bolder" class="navbar-brand"
 
     <li class="nav-item" routerLinkActive="active">
       <a class="nav-link notification" [routerLink]="['/messages']" routerLinkActive="active">Messages<span *ngIf="count!=='0'" class="badge badge-warning"> {{count}} </span></a>
-        </li>
+    </li>
+
+    <li *hasRole="['Admin','Moderator']" class="nav-item" routerLinkActive="active">
+      <a class="nav-link" [routerLink]="['/admin']" > Panneau de gestion </a>
+    </li>
 
   </ul>
 

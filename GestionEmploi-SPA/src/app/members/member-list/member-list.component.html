@@ -24,7 +24,8 @@
               </option>
             </select>
           </div>
-          <button type="submit" style="font-family:'CaviarDreams'" class="btn mb-1 ajs-button btn-up ml-1">Cherche</button>
+          <button type="submit" style="font-family:'CaviarDreams" class="btn btn-dark btn-small ml-2 mr-2">Cherche</button>
+          
           <button type="button" style="font-family:'CaviarDreams'" (click)="search=false;resetFilter();" class="btn mb-1 ajs-button btn-up ml-1">Récupération</button>
           <div class="col" >
             <div class="btn-group-vertical float-left">
@@ -44,9 +45,10 @@
     </div>
   </div>
 </div>
-<div class="d-flex justify-content-center">
-  <pagination [boundaryLinks]="true" [itemsPerPage]="pagination.itemsPerPage" [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)"
-            previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
-</pagination>
-</div>
 
+<div *ngIf="pagination.totalItems>0" class="d-flex justify-content-center">
+  <pagination [boundaryLinks]="true" [itemsPerPage]="pagination.itemsPerPage" [totalItems]="pagination.totalItems"
+    [(ngModel)]="pagination.currentPage" (pageChanged)="search=true;pageChanged($event);" previousText="&lsaquo;" nextText="&rsaquo;"
+    firstText="&laquo;" lastText="&raquo;">
+
+  </pagination>

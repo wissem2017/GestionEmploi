@@ -1,52 +1,65 @@
 using Newtonsoft.Json;
 using GestionEmploi.API.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using System.Linq;
 
 namespace GestionEmploi.API.Data
 {
     public class TrialData
     {
-        private readonly DataContext _context;
-        public TrialData(DataContext context)
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
+
+        public TrialData(UserManager<User> userManager, RoleManager<Role> roleManager)
         {
-            _context = context;
-            
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         //--> Méthode permet d'importer donnée de test de fichier JSON
-        public void TrialUsers(){
-            var userData=System.IO.File.ReadAllText("Data/UserTrialData.json");
-
-            var users=JsonConvert.DeserializeObject<List<User>>(userData);//--> convertir de fichier Json vers fichier .NET
-
-            foreach (var user in users)
-            {
-                byte[] passwordHash,passwordSalt;
-                CreatePasswordHash("password",out passwordHash, out passwordSalt); //--> Création passwordHash et passwordSalt
-
-                user.PasswordHash=passwordHash;
-                user.PasswordSalt=passwordSalt;
-                user.Username=user.Username.ToLower();
-
-                _context.Add(user);//--> Ajouter dans le context
-            }
-
-            _context.SaveChanges(); //--> fait l'Enregisterement
-
-             
-
-        }
-
-         //méthode permet de créer passwordHash et passwordSalt
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        public void TrialUsers()
         {
-            //créer une instence pour utiliser algorithme pour créer passwordSalt et passwordHash
-            using(var hmac = new System.Security.Cryptography.HMACSHA512()){
-                    passwordSalt=hmac.Key; //avoir le clé
-                    passwordHash=hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                    //création passwordHash en modifiant password en type string en type byte
+            if (!_userManager.Users.Any())
+            {
+                var userData = System.IO.File.ReadAllText("Data/UserTrialData.json");
+
+                var users = JsonConvert.DeserializeObject<List<User>>(userData);//--> convertir de fichier Json vers fichier .NET
+                //--> Création des Roles
+                var roles=new List<Role>{
+                    new Role{Name="Admin"},
+                    new Role{Name="Moderator"},
+                    new Role{Name="Member"},
+                    new Role{Name="VIP"}
+                };
+                //-->Ajout role à la table ROLE
+                foreach (var role in roles)
+                {
+                    _roleManager.CreateAsync(role).Wait();
+                }
+                //-->Ajout User
+                foreach (var user in users)
+                {
+                    // user.Photos.ToList().foreach(p=>p.IsApproved=true);
+                    _userManager.CreateAsync(user, "password").Wait();
+                    //-->Ajouter pour chaque user un role "Member"
+                    _userManager.AddToRoleAsync(user,"Member").Wait();
+                }
+
+                //-->Ajouter User Administrateur
+                var adminUser=new User{
+                    UserName = "Admin"
+                };
+
+                IdentityResult result=_userManager.CreateAsync(adminUser,"password").Result;
+                var admin = _userManager.FindByNameAsync("Admin").Result;
+                //--> Ajouter Role pour User Admin
+                _userManager.AddToRolesAsync(admin,new[]{"Admin","Moderator"}).Wait();
+
+
+
             }
-             
         }
+
     }
 }

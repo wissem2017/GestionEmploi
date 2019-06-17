@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace GestionEmploi.API.Models
 {
-    public class User
+    public class User: IdentityUser<int>
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
         public string Geder { get; set; }//genre
         public DateTime DateOfBirth { get; set; }
         public string  KnowAs { get; set; } //Nom de profile
@@ -25,6 +22,8 @@ namespace GestionEmploi.API.Models
         public ICollection<Like> Likees { get; set; }
         public ICollection<Message> MessageSent { get; set; }
          public ICollection<Message> MessageReceived { get; set; }
+
+         public ICollection<UserRole> UserRoles { get; set; }
 
 
 
