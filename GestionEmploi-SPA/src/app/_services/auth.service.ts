@@ -13,11 +13,16 @@ import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 export class AuthService {
 
   jwtHelper= new JwtHelperService();
+  
+  _lang:string='fr';
+  dir:string='ltr';
+
+
 
   decodedToken:any;
-
+  
   baseUrl=environment.apiUrl+'auth/'; //--> URL Controleur API auth
-
+  
   currentUser:User;
 
   paid:boolean=false;
@@ -25,13 +30,32 @@ export class AuthService {
   photoUrl=new BehaviorSubject<string>('../../assets/user.png');//--> Photo par défaux
   currentPhotoUrl=this.photoUrl.asObservable();
 
+  language= new BehaviorSubject<string>('fr');
+  lang=this.language.asObservable();
+
   unreadCount=new BehaviorSubject<string>('');
   latestUnreadCount =this.unreadCount.asObservable();
 
   hubConnection:HubConnection = new HubConnectionBuilder().withUrl("http://localhost:5000/chat").build();
 
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient) {
+    this.lang.subscribe(
+      lang=>{
+        if (lang=='fr'){
+          this.dir='ltr';
+          this._lang='fr';
+        }else if(lang=='en')
+        {
+          this.dir='ltr';
+          this._lang='en';
+        }else{
+          this.dir='rtl';
+          this._lang='ar';
+        }
+      }
+    );
+   }
 
   //--> Méthode permet de faire mise à jour photo de navbar
   changeMemberPhoto(newPhotoUrl:string){
